@@ -1,0 +1,78 @@
+scalar DateTime
+
+type User{
+    id: ID!
+    user_name : String!
+    first_name : String!
+    middle_name : String!
+    last_name : String!
+    gender : String!
+    email: String!
+    password: String!
+    saving: Saving
+    expense : [Expense]
+}
+
+type Expense{
+    id : Int!
+    amount : Float!
+    description : String
+    date : DateTime!
+}
+
+type Saving{
+    id: Int!
+    amount : Float!
+    description : String
+    date: DateTime!
+}
+
+type Category{
+    id : Int!
+    name : String!
+}
+
+type  Emi{
+    id: Int!
+    user_id: Int!
+    lender : String!
+    amount : Float!
+    interest : Float!
+    start_date : DateTime!
+    end_date : DateTime!
+}
+
+type Wishlist{
+    id: Int!
+    user_id : Int!
+    item_name : String!
+    estimate_cost : Float!
+    status : String!
+
+}
+
+type Query{
+    users : [User]
+    user_one(id:ID!): User
+    saving : [Saving]
+    saving_one(id:ID!) : Saving
+    expense : [Expense]
+    expense_one(id:ID!) :Expense
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
