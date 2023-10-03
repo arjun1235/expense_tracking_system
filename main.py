@@ -21,7 +21,8 @@ from ariadne.asgi import GraphQL
 from starlette.applications import Starlette
 from sqlalchemy import create_engine
 from ariadne import load_schema_from_path
-
+from graphql import GraphQLScalarType
+from datetime import datetime
 # create database
 
 path = 'postgresql://postgres:Arjun@localhost/project'
@@ -38,6 +39,8 @@ schema = load_schema_from_path('schema.graphql')
 query = QueryType()
 # mutation = MutationType()
 user = ObjectType("User")
+
+
 
 @query.field("users")
 def resolver_user(*_):

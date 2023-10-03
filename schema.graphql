@@ -1,4 +1,4 @@
-scalar DateTime
+scalar Date
 
 type User{
     id: ID!
@@ -17,14 +17,14 @@ type Expense{
     id : Int!
     amount : Float!
     description : String
-    date : DateTime!
+    date : Date!
 }
 
 type Saving{
     id: Int!
     amount : Float!
     description : String
-    date: DateTime!
+    date: Date!
 }
 
 type Category{
@@ -38,8 +38,8 @@ type  Emi{
     lender : String!
     amount : Float!
     interest : Float!
-    start_date : DateTime!
-    end_date : DateTime!
+    start_date : Date!
+end_date : Date!
 }
 
 type Wishlist{
