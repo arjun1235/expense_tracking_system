@@ -1,16 +1,19 @@
 scalar Date
 
 type User{
-    id: ID!
+    id: Int!
     user_name : String!
     first_name : String!
-    middle_name : String!
+    middle_name : String
     last_name : String!
     gender : String!
     email: String!
     password: String!
     saving: Saving
-    expense : [Expense]
+    expense : Expense
+    wishlist : Wishlist
+    emi : Emi
+
 }
 
 type Expense{
@@ -39,7 +42,7 @@ type  Emi{
     amount : Float!
     interest : Float!
     start_date : Date!
-end_date : Date!
+    end_date : Date!
 }
 
 type Wishlist{
@@ -48,22 +51,75 @@ type Wishlist{
     item_name : String!
     estimate_cost : Float!
     status : String!
-
 }
 
 type Query{
     users : [User]
     user_one(id:ID!): User
+    catogeries : [Category]
+    catogeries_one(id:ID!): Category
     saving : [Saving]
     saving_one(id:ID!) : Saving
     expense : [Expense]
     expense_one(id:ID!) :Expense
 }
 
+input for_user{
+    id:Int!
+    user_name : String!
+    first_name : String!
+    middle_name : String
+    last_name : String!
+    gender : String!
+    email: String!
+    password: String!
+}
 
+input for_categories{
+    id : Int!
+    name : String!
+}
 
+input for_wishlist{
+    id: Int!
+    user_id : Int!
+    item_name : String!
+    estimate_cost : Float!
+    status : String!
+}
 
+input for_expense{
+    id : Int!
+    amount : Float!
+    description : String
+    date : Date!
+}
 
+input for_savings{
+    id: Int!
+    amount : Float!
+    description : String
+    date: Date!
+}
+
+input for_emis{
+    id: Int!
+    user_id: Int!
+    lender : String!
+    amount : Float!
+    interest : Float!
+    start_date : Date!
+    end_date : Date!
+}
+
+type Mutation{
+    add_user(user : for_user!) : User
+    add_categorise(categories : for_categories!) : Category
+    add_wishlist(wishlist : for_wishlist!) : Wishlist
+    add_savings(saving : for_savings!) : Saving
+    add_expense(expense : for_expense!) : Expense
+    add_emis(emi : for_emis!) : Emi
+}
 
 
 
