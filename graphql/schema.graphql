@@ -1,0 +1,239 @@
+scalar Date
+
+type User{
+    id: Int!
+    user_name : String!
+    first_name : String!
+    middle_name : String
+    last_name : String!
+    gender : String!
+    email: String!
+    password: String!
+    balance: Balances
+    expense : Expense
+    wishlist : Wishlist
+    emis : Emi
+    income : Income
+    saving : Savings
+}
+
+type Savings{
+    id : Int!
+    user_id : Int!
+    amount : Float!
+}
+
+type Income{
+    id : Int!
+    user_id : Int!
+    amount  : Float!
+    description : String
+    date : Date!
+    user : User
+}
+
+type Expense{
+    id : Int!
+    user_id : Int!
+    category_id : Int!
+    amount : Float!
+    description : String
+    date : Date!
+    user : User
+    category : Category
+}
+
+type Balances{
+    user_id : Int!
+    amount : Float!
+    user : User
+}
+
+type Category{
+    id : Int!
+    name : String!
+    expense : Expense
+    wishlist : Wishlist
+    emis : Emi
+}
+
+type  Emi{
+    id: Int!
+    user_id: Int!
+    category_id : Int!
+    lender : String!
+    amount : Float!
+    interest_rate : Float!
+    start_date : Date!
+    end_date : Date!
+    category : Category
+    user : User
+}
+
+type Wishlist{
+    id: Int!
+    user_id : Int!
+    category_id : Int!
+    item_name : String!
+    estimate_cost : Float!
+    status : String!
+    priority : Int!
+    source : String!
+    user : User
+    categories : Category
+}
+
+type Query{
+    users : [User]
+    userOne(id:Int!): User
+    catogeries : [Category]
+    catogeriesOne(id:Int!): Category
+    balance : [Balances]
+    balanceOne(user_id:Int!) : Balances
+    expense : [Expense]
+    expenseOne(id:Int!) :Expense
+    income : [Income]
+    incomeOne(id:Int!) : Income
+}
+
+input addUserValue{
+    user_name : String!
+    first_name : String!
+    middle_name : String
+    last_name : String!
+    gender : String!
+    email: String!
+    password: String!
+}
+
+input addCategoriesValue{
+    name : String!
+}
+
+input addWishlistValue{
+    user_id : Int!
+    category_id : Int!
+    item_name : String!
+    estimate_cost : Float!
+    status : String!
+    priority : Int!
+    source : String!
+}
+
+input addExpenseValue{
+    user_id : Int!
+    category_id : Int!
+    amount : Float!
+    description : String
+    date : Date!
+}
+
+input addBalancesValue{
+    user_id : Int!
+    amount : Float!
+}
+
+input addEmisValue{
+    user_id: Int!
+    category_id : Int!
+    lender : String!
+    amount : Float!
+    interest_rate : Float!
+    start_date : Date!
+    end_date : Date!
+}
+
+input addIncomeValue{
+    user_id : Int!
+    amount  : Float!
+    description : String
+    date : Date!
+}
+
+input updateUserValue{
+    first_name : String
+    middle_name : String
+    last_name : String
+    gender : String
+    password: String
+}
+
+input updateCategoriesValue{
+    name : String
+}
+
+input updateWishlistValue{
+    item_name : String
+    estimate_cost : Float
+    status : String
+    source : String
+}
+
+input updateExpenseValue{
+    amount : Float
+    description : String
+    date : Date
+}
+
+input updateBalancesValue{
+    amount : Float
+}
+
+input updateEmisValue{
+    lender : String
+    amount : Float
+    interest_rate : Float
+    start_date : Date
+    end_date : Date
+}
+
+input updateIncomeValue{
+    amount  : Float
+    description : String
+    date : Date
+}
+
+input addSavingValue{
+    user_id : Int!
+    amount : Float!
+}
+
+type Mutation{
+    addUser(user : addUserValue!) : User
+    addCategorise(categories : addCategoriesValue!) : Category
+    addWishlist(wishlist : addWishlistValue!) : Wishlist
+#    addBalances(balance : addBalancesValue!) : Balances
+    addExpense(expense : addExpenseValue!) : Expense
+    addEmis(emi : addEmisValue!) : Emi
+    addIncome(income : addIncomeValue!) : Income
+    addSaving(saving : addSavingValue!) : Savings
+
+    updateUser(id : Int! , user : updateUserValue!) : User
+    updateCategorise(id : Int! ,categories : updateCategoriesValue!) : Category
+    updateWishlist(id : Int! , wishlist : updateWishlistValue!) : Wishlist
+    updateBalances(user_id : Int! , balance : updateBalancesValue!) : Balances
+    updateExpense(id : Int! , expense : updateExpenseValue!) : Expense
+    updateEmis(id : Int! , emi : updateEmisValue!) : Emi
+    updateIncome(id : Int! , income : updateIncomeValue!) : Income
+
+    deleteUser(id : Int!) : User
+    deleteCategories(id : Int!) : Category
+    deleteWishlist(id : Int!) : Wishlist
+    deleteBalances(user_id : Int!) : Balances
+    deleteExpense(id : Int!) : Expense
+    deleteEmis(id : Int!) : Emi
+    deleteIncome(id : Int!) : Income
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

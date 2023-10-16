@@ -1,6 +1,6 @@
 from sqlalchemy import Integer, Column, String, Date, ForeignKey, Float
-from main import Base
-
+from models import Base
+from sqlalchemy.orm import relationship
 class Expense(Base):
     __tablename__ = 'expense'
     id = Column(Integer, primary_key=True)
@@ -9,14 +9,15 @@ class Expense(Base):
     amount = Column(Float,nullable=False)
     description = Column(String(50))
     date = Column(Date,nullable=False)
+    user = relationship("Users")
+    category = relationship("Categories")
 
-    def __init__(self,id,user_id,category_id,amount,description,date):
-        self.id = id
+    def __init__(self,user_id,category_id,amount,description,date):
         self.category_id = category_id
         self.amount = amount
         self.description = description
         self.date = date
 
     def __repr__(self):
-        return f"(id = '{self.id}' category = '{self.category_id}')"
+        return f"( category = '{self.category_id}')"
 
