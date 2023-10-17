@@ -5,12 +5,11 @@ class Users(Base):
     __tablename__ = 'users'
     id = Column(Integer,primary_key=True)
     first_name = Column(String(20), nullable=False)
-    middle_name = Column(String(20), nullable= True)
     last_name = Column(String(20), nullable= False)
     gender = Column(String(20), nullable=False)
-    email = Column(String(20), nullable=True, unique=True)
+    email = Column(String(40), nullable=True, unique=True)
     user_name = Column(String(20), nullable=False, unique=True)
-    password = Column(String(20), nullable=False)
+    password = Column(String(80), nullable=False)
     wishlist = relationship("Wishlist", cascade="delete, merge, save-update")
     expense = relationship("Expense", cascade="delete, merge, save-update")
     emis = relationship("EMIs", cascade="delete, merge, save-update")
@@ -19,9 +18,8 @@ class Users(Base):
     saving = relationship("Savings", cascade="delete, merge, save-update")
 
 
-    def __init__(self,first_name, middle_name,last_name,gender, email, user_name, password)->None:
+    def __init__(self,first_name,last_name,gender, email, user_name, password)->None:
         self.first_name = first_name
-        self.middle_name = middle_name
         self.last_name = last_name
         self.gender = gender
         self.email = email

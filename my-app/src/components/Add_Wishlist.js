@@ -1,18 +1,13 @@
 import { useMutation } from '@apollo/client'
 import React, {useState} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
-import { RET_INT, SIGN_UP } from '../gqloperations/mutations'
+import {Link} from 'react-router-dom'
+import { SIGN_UP } from '../gqloperations/mutations'
 
 
-export default function SignUp() {
+export default function Add_Wishlist() {
     const [formData, setFormData] = useState({})
 
-    const navigation = useNavigate()
-    
-
-    const [signupUser] = useMutation(SIGN_UP,{
-        onCompleted (data)
-        {navigation("/Login")}})
+    const [signupUser] = useMutation(SIGN_UP)
     // if(loading) return <h1>Loading</h1>
   
   const handleChange = (e)=> {
@@ -23,25 +18,34 @@ export default function SignUp() {
     }
     
   const handleSubmit = async(e)=>{
-
     e.preventDefault()
     const data =await signupUser({
         variables: {
             user : formData
         }
-       
-    }    )
-        const user = data?.addUser;
-        if (!user){
-            console.log("error")
-        }
-        console.log(data)
+    })
+    const user = data?.addUser;
+    if (!user){
+        console.log("error")
     }
-
+    console.log(data)
+  }
     return (
     <div className='bg'>
         <Link to ="/" ><button class="reg">Home</button></Link>
         <div className='form_signin'>
+        {/* {
+            error &&
+            <div>{error.message}</div>
+        } */}
+        {
+            // data && data.adduser &&
+            // <div>{data?.adduser?.id}
+            //     {data.userdata.first_name}
+            //     {data.userdata.email}
+            //     {data.userdata.user_name}
+            // </div>
+        }
 
         <h1 className='container'>SignUp</h1>
         <form onSubmit={handleSubmit} className='form-floating'>
@@ -52,7 +56,12 @@ export default function SignUp() {
                 onChange={handleChange}
                 required
             />
-            
+            <input className='form-control'
+                type='text'
+                placeholder='Middle Name'
+                name='middle_name'
+                onChange={handleChange}
+            />
             <input className='form-control'
                 type='text'
                 placeholder='Last Name'

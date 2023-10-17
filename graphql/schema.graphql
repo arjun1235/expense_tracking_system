@@ -4,7 +4,6 @@ type User{
     id: Int!
     user_name : String!
     first_name : String!
-    middle_name : String
     last_name : String!
     gender : String!
     email: String!
@@ -15,6 +14,11 @@ type User{
     emis : Emi
     income : Income
     saving : Savings
+}
+
+type Login{
+    user_name : String!
+    token : String!
 }
 
 type Savings{
@@ -83,23 +87,9 @@ type Wishlist{
     categories : Category
 }
 
-type Query{
-    users : [User]
-    userOne(id:Int!): User
-    catogeries : [Category]
-    catogeriesOne(id:Int!): Category
-    balance : [Balances]
-    balanceOne(user_id:Int!) : Balances
-    expense : [Expense]
-    expenseOne(id:Int!) :Expense
-    income : [Income]
-    incomeOne(id:Int!) : Income
-}
-
 input addUserValue{
     user_name : String!
     first_name : String!
-    middle_name : String
     last_name : String!
     gender : String!
     email: String!
@@ -152,7 +142,6 @@ input addIncomeValue{
 
 input updateUserValue{
     first_name : String
-    middle_name : String
     last_name : String
     gender : String
     password: String
@@ -198,7 +187,22 @@ input addSavingValue{
     amount : Float!
 }
 
+type Query{
+    users : [User]
+    userOne(user_name:String!): User
+    catogeries : [Category]
+    catogeriesOne(id:Int!): Category
+    balance : [Balances]
+    balanceOne(user_id:Int!) : Balances
+    expense : [Expense]
+    expenseOne(id:Int!) :Expense
+    income : [Income]
+    incomeOne(id:Int!) : Income
+}
+
+
 type Mutation{
+    login(user_name : String!, password : String!) : Login
     addUser(user : addUserValue!) : User
     addCategorise(categories : addCategoriesValue!) : Category
     addWishlist(wishlist : addWishlistValue!) : Wishlist

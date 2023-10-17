@@ -14,7 +14,11 @@ from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from ariadne import QueryType, MutationType, make_executable_schema, ScalarType
 from ariadne.asgi import GraphQL
+from ariadne.asgi.handlers import GraphQLHTTPHandler
 from starlette.applications import Starlette
+from graphql import GraphQLResolveInfo
+from creation.jwt_token import JWTManager
+from creation.hash import hash_password
 
 from ariadne import load_schema_from_path
 from creation import session
@@ -49,8 +53,8 @@ def resolver_expense(*_):
     return expen
 
 @query.field("userOne")
-def resolver_oneuser(*_,id):
-    user = session.query(Users).where(Users.id == id).first()
+def resolver_oneuser(*_,user_name):
+    user = session.query(Users).where(Users.user_name == user_name).first()
     return user
 
 @query.field("catogeriesOne")
@@ -100,16 +104,7 @@ def resolver_income(*_,id):
 ################################################ mutaition add
 @mutation.field("addUser")
 def resolver_add_user(*_,user):
-    # id_check = session.query(Users).where(user["id"] == Users.id).first()
-    # email_check = session.query(Users).where(user["email"] == Users.email).first()
-    # username_check = session.query(Users).where(user["user_name"]== Users.user_name).first()
-    # if id_check:
-    #     raise HttpBadRequestError("id already exists")
-    # if email_check:
-    #     raise HttpBadRequestError("email already exists")
-    # if username_check:
-    #     raise HttpBadRequestError("username already exists")
-    userobj = Users(user["first_name"],user["middle_name"], user["last_name"],user["gender"],user["email"],user["user_name"],user["password"])
+    userobj = Users(user["first_name"], user["last_name"],user["gender"],user["email"],user["user_name"],hash_password(user["password"]))
     session.add(userobj)
     session.commit()
     return userobj
@@ -174,6 +169,8 @@ def resolver_add_emis(*_,emi):
 
 @mutation.field("addIncome")
 def resolver_add_income(*_,income):
+    print(income)
+
     # check_userid = session.query(Users).where(Users.id == income["user_id"]).first()
     # if not check_userid:
     #     raise HttpBadRequestError("user doesnot exist")
@@ -195,14 +192,12 @@ def resolver_updateUser(*_,id,user):
     data = session.query(Users).filter(Users.id == id)
     if "first_name" in user:
         data.update({Users.first_name : user["first_name"]})
-    if "middle_name" in user:
-        data.update({Users.middle_name : user["middle_name"]})
     if "last_name" in user:
         data.update({Users.last_name : user["last_name"]})
     if "gender" in user:
         data.update({Users.gender : user["gender"]})
     if "password" in user:
-        data.update({Users.password : user["password"]})
+        data.update({Users.password : hash_password(user["password"])})
     session.commit()
     return data.first()
 
@@ -324,11 +319,42 @@ def resolver_deleteCategories(*_,id):
     session.commit()
     return data
 
+@mutation.field("login")
+def resolver_login(*_,user_name,password):
+    user_obj = session.query(Users).where(Users.user_name == user_name).first()
+    if not user_obj:
+        raise HttpBadRequestError("please register first")
+    pw=hash_password(password)
+    if pw != user_obj.password:
+        raise HttpBadRequestError("Invalid password")
+    token = JWTManager.generate_token({"sub": user_name})
+    login_info = {"user_name": user_name, "token": token}
+    return login_info
+
+
+def protect_route(resolver, obj, info: GraphQLResolveInfo, **args):
+    non_routed_mutations = ["IntrospectionQuery","adduser", "login", "GetAllUsers"]
+    mutation_name = info.operation.name.value
+    if mutation_name in non_routed_mutations:
+        return resolver(obj, info, **args)
+    headers = info.context["request"].headers
+    authorization_header = headers.get("Authorization")
+    if not authorization_header:
+        raise HttpBadRequestError("Authorization header missing or empty")
+    token = authorization_header.split(" ")[-1]
+    verified = JWTManager.verify_jwt(token)
+    if not verified:
+        raise HttpBadRequestError("Expired or invalid JWT")
+    value = resolver(obj, info, **args)
+    return value
 
 execute_schema = make_executable_schema(schema,query,mutation,datetime_scalar)
-middleware = [Middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'])]
+middleware = [Middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])]
 app = Starlette(debug=True, middleware=middleware)
-app.mount("/graphql/", GraphQL(execute_schema, debug=True))
+app.mount("/graphql/", GraphQL(execute_schema, debug=True,
+                               http_handler=GraphQLHTTPHandler(middleware=[protect_route])
+                               ))
+
 
 
 
