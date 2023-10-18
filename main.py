@@ -71,6 +71,11 @@ def resolver_expenseone(*_,id):
     expen = session.query(Expense).where(Expense.id == id).first()
     return expen
 
+@query.field("savingOne")
+def resolver_savingone(*_,user_id):
+    sav = session.query(Savings).where(Savings.user_id == user_id)
+    return sav
+
 @query.field("income")
 def resolver_income(*_):
     inc = session.query(Incomes)
@@ -351,7 +356,7 @@ execute_schema = make_executable_schema(schema,query,mutation,datetime_scalar)
 middleware = [Middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])]
 app = Starlette(debug=True, middleware=middleware)
 app.mount("/graphql/", GraphQL(execute_schema, debug=True,
-                               http_handler=GraphQLHTTPHandler(middleware=[protect_route])
+                               # http_handler=GraphQLHTTPHandler(middleware=[protect_route])
                                ))
 
 

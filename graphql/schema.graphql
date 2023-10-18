@@ -191,9 +191,10 @@ type Query{
     balance : [Balances]
     balanceOne(user_id:Int!) : Balances
     expense : [Expense]
-    expenseOne(id:Int!) :Expense
+    expenseOne(id:Int!) :[Expense]
     income : [Income]
     incomeOne(id:Int!) : Income
+    savingOne(user_id: Int!) : [Savings]
 }
 
 

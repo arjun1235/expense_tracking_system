@@ -15,7 +15,9 @@ export default function User_dashboard() {
 
   return (
     <div className='bg'>
-          <h1 className='welcome'> Welcome {data?.userOne?.first_name}</h1>
+          <h1 className='welcome'> Welcome {data?.userOne?.first_name}
+          <Link to ="/report"><button className="report">View Report</button></Link>
+          </h1>
           {/* <h1 className='welcome'> Welcome {data?.userOne?.id}</h1> */}
           {
             localStorage.setItem("user_id" , data?.userOne?.id)
@@ -31,8 +33,12 @@ export default function User_dashboard() {
                  <Link to ="/add_emis" ><button className="log">Add EMIs</button></Link>
                </div>
                <div className='space'>
-                 <Link to ="/add_saving"><button className="log">Add Saving</button></Link>
+                 <Link to ="/add_saving"><button className="sv">Add Saving</button></Link>
                  </div>
+                
+                <div className='space'>
+                <Link to ="/aLogin"><button className="logout">Logout</button></Link>
+                </div>
                
           </div> 
         </div>

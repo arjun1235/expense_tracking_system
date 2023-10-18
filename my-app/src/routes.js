@@ -7,6 +7,8 @@ import Home from './components/Home';
 import Login from './components/Login';
 import User_dashboard from './components/User_dashboard';
 import SignUp from './components/signUp';
+import Report from './components/Report';
+
 
 export const routes = [
     {path: "/", element:<Home/>},
@@ -18,4 +20,5 @@ export const routes = [
     {path: "/add_wishlist",element: <Add_Wishlist />},
     {path: "/add_expense",element: <Add_Expense />},
     {path: "/add_saving",element: <Add_Saving />},
+    {path: "/report",element: <Report />}
 ]

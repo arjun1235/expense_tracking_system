@@ -110,6 +110,7 @@ button {
   padding: 10px 0;
   box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
   transition: 0.4s;
+  text-align: center;
 }
 
 .reg {
@@ -131,4 +132,20 @@ button:hover {
 
 .space{
   margin-top: 20px;
+}
+
+.logout{
+  margin-top: 20px;
+  background-color: rgb(192, 21, 21);
+  height: 30px;
+  width: 100px;
+}
+
+.logout:hover{
+  background-color: rgb(13, 181, 237);
+}
+
+.sv{
+  /* text-align: center; */
+  background-color: rgb(32, 198, 32);
 }
