@@ -1,113 +1,97 @@
 import { useMutation } from '@apollo/client'
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
-import { SIGN_UP } from '../gqloperations/mutations'
+import {Link, useNavigate} from 'react-router-dom'
+import { ADD_WISHLIST } from '../gqloperations/mutations'
 
 
 export default function Add_Wishlist() {
-    const [formData, setFormData] = useState({})
 
-    const [signupUser] = useMutation(SIGN_UP)
-    // if(loading) return <h1>Loading</h1>
-  
-  const handleChange = (e)=> {
-    setFormData({
-        ...formData,
-        [e.target.name]:e.target.value
-        })
-    }
+    const [formData, setFormData] = useState({})
+    const navigation = useNavigate()
     
-  const handleSubmit = async(e)=>{
-    e.preventDefault()
-    const data =await signupUser({
-        variables: {
-            user : formData
+    const [addwishlist] = useMutation(ADD_WISHLIST,{
+        onCompleted(data){
+            navigation("/user_dashboard")
         }
     })
-    const user = data?.addUser;
-    if (!user){
-        console.log("error")
+  
+  const handleChange = (e)=> {
+    let value = parseInt(e.target.value);
+    if (Number.isNaN(value)){
+        value = e.target.value
     }
-    console.log(data)
+
+    setFormData({
+        ...formData,
+        [e.target.name]:value
+        })
+    }
+   
+
+  const handleSubmit = async(e)=>{
+    e.preventDefault()
+    await addwishlist({
+        variables: {
+            wishlist : {
+                user_id: parseInt(localStorage.getItem("user_id")),
+                category_id: formData.category_id,
+                item_name: formData.item_name,
+                estimate_cost: formData.estimate_cost,
+                priority: formData.priority,
+                source: formData.source,
+
+            }
+        }
+    })
+
   }
     return (
     <div className='bg'>
-        <Link to ="/" ><button class="reg">Home</button></Link>
         <div className='form_signin'>
-        {/* {
-            error &&
-            <div>{error.message}</div>
-        } */}
-        {
-            // data && data.adduser &&
-            // <div>{data?.adduser?.id}
-            //     {data.userdata.first_name}
-            //     {data.userdata.email}
-            //     {data.userdata.user_name}
-            // </div>
-        }
 
-        <h1 className='container'>SignUp</h1>
+        <h1 className='container'>Adding Wishlist</h1>
         <form onSubmit={handleSubmit} className='form-floating'>
+            
             <input className='form-control'
-                type='text'
-                placeholder='First Name'
-                name='first_name'
+                type='number'
+                placeholder='category id'
+                name='category_id'
                 onChange={handleChange}
                 required
             />
             <input className='form-control'
                 type='text'
-                placeholder='Middle Name'
-                name='middle_name'
+                placeholder='Item name'
+                name='item_name'
                 onChange={handleChange}
+                required
             />
             <input className='form-control'
-                type='text'
-                placeholder='Last Name'
-                name='last_name'
+                type='number'
+                placeholder='Amount'
+                name='estimate_cost'
+                onChange={handleChange}
+                required
+            />
+            <input className='form-control'
+                type='number'
+                placeholder='Priority'
+                name='priority'
                 onChange={handleChange}
                 required
             />
             <input className='form-control'
                 type='text'
-                placeholder='Gender'
-                name='gender'
+                placeholder='Source'
+                name='source'
                 onChange={handleChange}
                 required
             />
-            <input className='form-control'
-                type='email'
-                placeholder='Email'
-                name='email'
-                onChange={handleChange}
-                required
-            />
-            <input className='form-control'
-                type='user_name'
-                placeholder='user_name'
-                name='user_name'
-                onChange={handleChange}
-                required
-            />
-            <input className='form-control'
-                type='password'
-                placeholder='password'
-                name='password'
-                onChange={handleChange}
-                required
-            />
-            <button className='btn #673ab7 deep-purple' type='submit'>Register</button>
+            
+            
+            <button className='btn #673ab7 deep-purple' type='submit'>Add</button>
         </form>
         </div>
-        <Link to="/Login"><h1 style={{
-            fontSize : '14px'
-        }}>Already have an account</h1></Link>
-
-<Link to="/user_dashboard"><h1 style={{
-            fontSize : '14px'
-        }}>for user dashboard</h1></Link>
-
 
     </div>
   )

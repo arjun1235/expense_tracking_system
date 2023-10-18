@@ -54,7 +54,6 @@ type Balances{
 }
 
 type Category{
-    id : Int!
     name : String!
     expense : Expense
     wishlist : Wishlist
@@ -62,7 +61,6 @@ type Category{
 }
 
 type  Emi{
-    id: Int!
     user_id: Int!
     category_id : Int!
     lender : String!
@@ -75,7 +73,6 @@ type  Emi{
 }
 
 type Wishlist{
-    id: Int!
     user_id : Int!
     category_id : Int!
     item_name : String!
@@ -105,12 +102,11 @@ input addWishlistValue{
     category_id : Int!
     item_name : String!
     estimate_cost : Float!
-    status : String!
     priority : Int!
     source : String!
 }
 
-input addExpenseValue{
+    input addExpenseValue{
     user_id : Int!
     category_id : Int!
     amount : Float!

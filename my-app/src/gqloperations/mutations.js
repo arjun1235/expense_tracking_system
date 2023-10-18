@@ -1,10 +1,5 @@
 import {gql} from '@apollo/client'
 
-export const RET_INT= gql `
-mutation id($user_name : String!){
-  idret(user_name : $user_name)
-}
-`
 
 export const SIGN_UP = gql`
 mutation adduser($user : addUserValue! ){
@@ -38,4 +33,46 @@ mutation addincome($income : addIncomeValue!){
     date
   }}
 `
-
+export const ADD_SAVING = gql`
+mutation addsaving($saving : addSavingValue!){
+  addSaving(saving : $saving)
+    {
+      user_id
+      amount
+}}
+`
+export const ADD_WISHLIST = gql `
+mutation addWishlist($wishlist : addWishlistValue!){
+  addWishlist(wishlist : $wishlist){
+    user_id
+    status
+    priority
+    source
+    item_name
+    
+  }}
+  `
+export const ADD_EMIS =gql`
+mutation addEmis($emi : addEmisValue!) {
+  addEmis(emi : $emi){
+    user_id
+    category_id
+    lender
+    amount
+    interest_rate
+    start_date
+    end_date
+  }
+}
+`
+export const ADD_EXPENSE = gql`
+mutation addexpense($expense : addExpenseValue!){
+  addExpense(expense :$expense){
+   	user_id
+    category_id
+    amount
+    description
+    date
+    user_id
+  }}
+  `

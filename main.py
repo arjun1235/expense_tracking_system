@@ -121,27 +121,26 @@ def resolver_add_categories(*_,categories):
 
 @mutation.field("addWishlist")
 def resolver_add_wishlist(*_,wishlist):
-    # check_id = session.query(Wishlist).where(Wishlist.id == wishlist["id"]).first()
-    # if check_id:
-    #     raise HttpBadRequestError("id already exists")
-    wishlistobj = Wishlist(wishlist["user_id"],wishlist["category_id"],wishlist["item_name"],wishlist["estimate_cost"],wishlist["status"],wishlist["priority"],wishlist["source"])
+    balance_obj = session.query(Balances).filter(Balances.user_id == wishlist["user_id"])
+    if wishlist["estimate_cost"] <balance_obj.first().amount:
+        wishlistobj = Wishlist(wishlist["user_id"],wishlist["category_id"],wishlist["item_name"],wishlist["estimate_cost"],"you can do it",wishlist["priority"],wishlist["source"])
+    else:
+        wishlistobj = Wishlist(wishlist["user_id"],wishlist["category_id"],wishlist["item_name"],wishlist["estimate_cost"],"you can not do it",wishlist["priority"],wishlist["source"])
     session.add(wishlistobj)
     session.commit()
     return wishlistobj
 
 @mutation.field("addExpense")
-def resolver_add_expense(*_,expense):
+def resolver_addExpense(*_,expense):
     balance_obj = session.query(Balances).filter(Balances.user_id == expense["user_id"])
-
-    expenseobj = Expense(expense["id"],expense["user_id"],expense["category_id"],expense["amount"],expense["description"],expense["date"])
     if expense["amount"] < balance_obj.first().amount:
-        session.add(expenseobj)
+        expense_obj = Expense(expense["user_id"],expense["category_id"],expense["amount"],expense["description"],expense["date"])
+        session.add(expense_obj)
     else:
         raise HttpBadRequestError("not enough balance")
-    balance_obj.update({Balances.amount : ( balance_obj.first().amount - expense["amount"])})
+    balance_obj.update({Balances.amount : (balance_obj.first().amount - expense["amount"])})
     session.commit()
-
-    return expenseobj
+    return expense_obj
 
 @mutation.field("addSaving")
 def resolver_addSaving(*_,saving):
@@ -159,7 +158,7 @@ def resolver_addSaving(*_,saving):
 def resolver_add_emis(*_,emi):
     balance_obj = session.query(Balances).filter(Balances.user_id == emi["user_id"])
     emisobj = EMIs(emi["user_id"],emi["category_id"],emi["lender"],emi["amount"],emi["interest_rate"],emi["start_date"],emi["end_date"])
-    if emi["amount"] > balance_obj.first().amount:
+    if emi["amount"] < balance_obj.first().amount:
         session.add(emisobj)
     else:
         raise HttpBadRequestError("not enough balances")
@@ -333,7 +332,7 @@ def resolver_login(*_,user_name,password):
 
 
 def protect_route(resolver, obj, info: GraphQLResolveInfo, **args):
-    non_routed_mutations = ["IntrospectionQuery","adduser", "login", "GetAllUsers"]
+    non_routed_mutations = ["IntrospectionQuery","adduser", "login", "GetAllUsers","addcategories"]
     mutation_name = info.operation.name.value
     if mutation_name in non_routed_mutations:
         return resolver(obj, info, **args)

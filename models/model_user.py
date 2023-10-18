@@ -11,7 +11,7 @@ class Users(Base):
     user_name = Column(String(20), nullable=False, unique=True)
     password = Column(String(80), nullable=False)
     wishlist = relationship("Wishlist", cascade="delete, merge, save-update")
-    expense = relationship("Expense", cascade="delete, merge, save-update")
+    expense = relationship("Expense", cascade="delete, merge, save-update",back_populates="user")
     emis = relationship("EMIs", cascade="delete, merge, save-update")
     balance = relationship("Balances", cascade="delete, merge, save-update")
     income = relationship("Incomes", cascade="delete, merge, save-update")

@@ -20,18 +20,16 @@ export default function Add_Income() {
     if (Number.isNaN(value) || e.target.name==="date"){
         value = e.target.value
     }
-   console.log(parseInt(localStorage.getItem("user_id"))) 
-
 
     setFormData({
         ...formData,
         [e.target.name]:value
         })
     }
-    
+   
+
   const handleSubmit = async(e)=>{
     e.preventDefault()
-    console.log(formData)
     await addincome({
         variables: {
             income : {
@@ -42,8 +40,7 @@ export default function Add_Income() {
             }
         }
     })
-    console.log(formData)
-   console.log(parseInt(localStorage.getItem("user_id"))) 
+
   }
     return (
     <div className='bg'>

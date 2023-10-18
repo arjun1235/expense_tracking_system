@@ -31,7 +31,7 @@ export default function User_dashboard() {
                  <Link to ="/add_emis" ><button className="log">Add EMIs</button></Link>
                </div>
                <div className='space'>
-                 <Link to ="/add_expense"><button className="log">Add Saving</button></Link>
+                 <Link to ="/add_saving"><button className="log">Add Saving</button></Link>
                  </div>
                
           </div> 
