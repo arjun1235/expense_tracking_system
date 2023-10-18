@@ -67,8 +67,8 @@ def resolver_balanceOne(*_,user_id):
     return bal
 
 @query.field("expenseOne")
-def resolver_expenseone(*_,id):
-    expen = session.query(Expense).where(Expense.id == id).first()
+def resolver_expenseone(*_,user_id):
+    expen = session.query(Expense).where(Expense.user_id == user_id)
     return expen
 
 @query.field("savingOne")
@@ -82,29 +82,26 @@ def resolver_income(*_):
     return inc
 
 @query.field("incomeOne")
-def resolver_income(*_,id):
-    inc = session.query(Incomes).where(Incomes.id == id).first()
+def resolver_incomeOne(*_,user_id):
+    inc = session.query(Incomes).where(Incomes.user_id == user_id)
     return inc
 
-# @user.field("saving")
-# def resolver_saving_user(root,info):
-#     sav = session.query(Savings).where(Savings.user_id == root.id).first()
-#     return sav
+@query.field("wishlistOne")
+def resolver_wishlistone(*_,user_id):
+    wis = session.query(Wishlist).where(Wishlist.user_id == user_id)
 
-# @user.field("expense")
-# def resolver_expenses_user(root,info):
-#     exp = session.query(Expense).where(Expense.user_id == root.id).first()
-#     return exp
-#
-# @user.field("emi")
-# def resolver_emi_user(root,info):
-#     em = session.query(EMIs).where(EMIs.user_id == root.id).first()
-#     return em
-#
-# @user.field("wishlist")
-# def resolver_wishlist_user(root,info):
-#     whis = session.query(Wishlist).where(Wishlist.user_id == root.id).first()
-#     return whis
+    print(wis)
+    print("tori")
+    return wis
+@query.field("wishlist")
+def resolver_wislist(*_):
+    wis = session.query(Wishlist)
+    return wis
+@query.field("emisOne")
+def resolver_emisOne(*_,user_id):
+    em = session.query(EMIs).where(EMIs.user_id==user_id)
+    return em
+
 
 ################################################ mutaition add
 @mutation.field("addUser")
@@ -130,7 +127,7 @@ def resolver_add_wishlist(*_,wishlist):
     if wishlist["estimate_cost"] <balance_obj.first().amount:
         wishlistobj = Wishlist(wishlist["user_id"],wishlist["category_id"],wishlist["item_name"],wishlist["estimate_cost"],"you can do it",wishlist["priority"],wishlist["source"])
     else:
-        wishlistobj = Wishlist(wishlist["user_id"],wishlist["category_id"],wishlist["item_name"],wishlist["estimate_cost"],"you can not do it",wishlist["priority"],wishlist["source"])
+        raise HttpBadRequestError("not enough balance")
     session.add(wishlistobj)
     session.commit()
     return wishlistobj

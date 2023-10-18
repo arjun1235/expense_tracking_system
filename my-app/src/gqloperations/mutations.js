@@ -74,5 +74,6 @@ mutation addexpense($expense : addExpenseValue!){
     description
     date
     user_id
-  }}
-  `
+  }
+}
+`

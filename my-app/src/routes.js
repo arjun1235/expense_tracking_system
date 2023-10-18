@@ -8,6 +8,7 @@ import Login from './components/Login';
 import User_dashboard from './components/User_dashboard';
 import SignUp from './components/signUp';
 import Report from './components/Report';
+import IncomeReport from './components/income';
 
 
 export const routes = [
@@ -20,5 +21,7 @@ export const routes = [
     {path: "/add_wishlist",element: <Add_Wishlist />},
     {path: "/add_expense",element: <Add_Expense />},
     {path: "/add_saving",element: <Add_Saving />},
-    {path: "/report",element: <Report />}
+    {path: "/report",element: <Report />},
+    {path: "/report/income",element: <IncomeReport />}
+
 ]

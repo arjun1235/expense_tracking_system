@@ -19,19 +19,41 @@ query savingOne($user_id: Int!){
 }
 `
 export const  GET_BALANCE = gql`
-query balanceone($user_id:Int!){
+query balanceOne($user_id:Int!){
   balanceOne(user_id: $user_id){
     amount
   }
 }
 `
 export const GET_EXPENSE = gql`
-query expenseone($id:Int!){
-  expenseOne(id : $id){
+query expenseOne($user_id:Int!){
+  expenseOne(user_id : $user_id){
     category_id
     amount
     description
     date
+  }
+}
+`
+export const GET_INCOME =gql`
+query incomeOne($user_id :Int!){
+  incomeOne(user_id:$user_id){
+    amount
+    description
+    date
+    
+  }
+}
+`
+export const GET_EMIS= gql`
+query emisOne($user_id:Int!){
+  emisOne(user_id:$user_id){
+   category_id
+    lender
+    amount
+    interest_rate
+    start_date
+    end_date
   }
 }
 `

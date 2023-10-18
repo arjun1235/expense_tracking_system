@@ -84,6 +84,7 @@ type Wishlist{
     categories : Category
 }
 
+
 input addUserValue{
     user_name : String!
     first_name : String!
@@ -191,10 +192,13 @@ type Query{
     balance : [Balances]
     balanceOne(user_id:Int!) : Balances
     expense : [Expense]
-    expenseOne(id:Int!) :[Expense]
+    expenseOne(user_id:Int!) :[Expense]
     income : [Income]
-    incomeOne(id:Int!) : Income
+    incomeOne(user_id:Int!) : [Income]
     savingOne(user_id: Int!) : [Savings]
+    wishlistOne(user_id: Int!) : [Wishlist]
+    wishlist : [Wishlist]
+    emisOne(user_id : Int!) : [Emi]
 }
 
 

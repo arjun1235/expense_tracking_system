@@ -37,7 +37,7 @@ export default function User_dashboard() {
                  </div>
                 
                 <div className='space'>
-                <Link to ="/aLogin"><button className="logout">Logout</button></Link>
+                <Link to ="/Login"><button className="logout">Logout</button></Link>
                 </div>
                
           </div> 
