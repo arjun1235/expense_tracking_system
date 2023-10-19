@@ -89,9 +89,7 @@ def resolver_incomeOne(*_,user_id):
 @query.field("wishlistOne")
 def resolver_wishlistone(*_,user_id):
     wis = session.query(Wishlist).where(Wishlist.user_id == user_id)
-
     print(wis)
-    print("tori")
     return wis
 @query.field("wishlist")
 def resolver_wislist(*_):
@@ -124,10 +122,10 @@ def resolver_add_categories(*_,categories):
 @mutation.field("addWishlist")
 def resolver_add_wishlist(*_,wishlist):
     balance_obj = session.query(Balances).filter(Balances.user_id == wishlist["user_id"])
-    if wishlist["estimate_cost"] <balance_obj.first().amount:
-        wishlistobj = Wishlist(wishlist["user_id"],wishlist["category_id"],wishlist["item_name"],wishlist["estimate_cost"],"you can do it",wishlist["priority"],wishlist["source"])
+    if wishlist["estimated_cost"] <balance_obj.first().amount:
+        wishlistobj = Wishlist(wishlist["user_id"],wishlist["categories_id"],wishlist["item_name"],wishlist["estimated_cost"],"you can do it",wishlist["priority"],wishlist["source"])
     else:
-        raise HttpBadRequestError("not enough balance")
+        wishlistobj = Wishlist(wishlist["user_id"],wishlist["categories_id"],wishlist["item_name"],wishlist["estimated_cost"],"you can not do it",wishlist["priority"],wishlist["source"])
     session.add(wishlistobj)
     session.commit()
     return wishlistobj
@@ -353,7 +351,7 @@ execute_schema = make_executable_schema(schema,query,mutation,datetime_scalar)
 middleware = [Middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])]
 app = Starlette(debug=True, middleware=middleware)
 app.mount("/graphql/", GraphQL(execute_schema, debug=True,
-                               # http_handler=GraphQLHTTPHandler(middleware=[protect_route])
+                               http_handler=GraphQLHTTPHandler(middleware=[protect_route])
                                ))
 
 

@@ -63,10 +63,10 @@ export default function Report() {
 
                 <div className='user-balance'>
                     <div className='user'>
-                        {user_obj?.data?.userOne?.first_name} </div>
+                       <h1>Welcome {user_obj?.data?.userOne?.first_name}</h1> </div>
 
                     <div className='balance'>
-                        Available Balance :  {balance_obj?.data?.balanceOne?.amount}
+                        <h2>Available Balance :  {balance_obj?.data?.balanceOne?.amount}</h2>
                     </div>
                 </div>
 
@@ -145,4 +145,5 @@ export default function Report() {
             </div>
         </div>
     )
+    
 }

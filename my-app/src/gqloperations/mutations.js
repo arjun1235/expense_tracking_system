@@ -49,7 +49,8 @@ mutation addWishlist($wishlist : addWishlistValue!){
     priority
     source
     item_name
-    
+    categories_id
+    estimated_cost
   }}
   `
 export const ADD_EMIS =gql`

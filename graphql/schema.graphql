@@ -74,9 +74,9 @@ type  Emi{
 
 type Wishlist{
     user_id : Int!
-    category_id : Int!
+    categories_id : Int!
     item_name : String!
-    estimate_cost : Float!
+    estimated_cost : Float!
     status : String!
     priority : Int!
     source : String!
@@ -100,14 +100,14 @@ input addCategoriesValue{
 
 input addWishlistValue{
     user_id : Int!
-    category_id : Int!
+    categories_id : Int!
     item_name : String!
-    estimate_cost : Float!
+    estimated_cost : Float!
     priority : Int!
     source : String!
 }
 
-    input addExpenseValue{
+input addExpenseValue{
     user_id : Int!
     category_id : Int!
     amount : Float!

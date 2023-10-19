@@ -34,9 +34,9 @@ export default function Add_Wishlist() {
         variables: {
             wishlist : {
                 user_id: parseInt(localStorage.getItem("user_id")),
-                category_id: formData.category_id,
+                categories_id: formData.categories_id,
                 item_name: formData.item_name,
-                estimate_cost: formData.estimate_cost,
+                estimated_cost: formData.estimated_cost,
                 priority: formData.priority,
                 source: formData.source,
 
@@ -55,7 +55,7 @@ export default function Add_Wishlist() {
             <input className='form-control'
                 type='number'
                 placeholder='category id'
-                name='category_id'
+                name='categories_id'
                 onChange={handleChange}
                 required
             />
@@ -69,7 +69,7 @@ export default function Add_Wishlist() {
             <input className='form-control'
                 type='number'
                 placeholder='Amount'
-                name='estimate_cost'
+                name='estimated_cost'
                 onChange={handleChange}
                 required
             />
