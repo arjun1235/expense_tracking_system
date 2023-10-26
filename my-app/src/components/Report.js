@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { Link } from 'react-router-dom'
 import React from 'react'
-import { GET_BALANCE, GET_EMIS, GET_EXPENSE, GET_INCOME, GET_SAVINGS, GET_USERS } from '../gqloperations/queries'
+import { GET_BALANCE, GET_EMIS, GET_EXPENSE, GET_INCOME, GET_SAVINGS, GET_USERS, GET_WISHLSIT } from '../gqloperations/queries'
 
 export default function Report() {
     const userid = +localStorage.getItem("user_id")
@@ -33,6 +33,10 @@ export default function Report() {
         variables: { "user_id": userid }
     })
 
+    const wishlist_obj = useQuery(GET_WISHLSIT, {
+        variables: { "user_id": userid }
+    })
+
 
     const mappedData = income_obj?.data?.incomeOne?.map(item => ({
         name: item?.description,
@@ -47,9 +51,25 @@ export default function Report() {
         amount: item?.amount,
         description: item?.description,
         date: item?.date
-    }
+    }))
 
-    ))
+    const mappedSaving = saving_obj?.data?.savingOne?.map((item) => ({
+        amount: item?.amount
+    }))
+
+    const mappedEmis = emis_obj?.data?.emisOne?.map((item) => ({
+        lender: item?.lender,
+        amount: item?.amount,
+        interest: item?.interest_rate
+    }))
+
+    const mappedWishlist = wishlist_obj?.data?.wishlistOne?.map((item) => ({
+        name: item?.item_name,
+        cost: item?.estimated_cost,
+        status: item?.status,
+        source: item?.source
+    }))
+
 
     console.log(mappedExpense, 'mappeexfdd')
 
@@ -63,7 +83,7 @@ export default function Report() {
 
                 <div className='user-balance'>
                     <div className='user'>
-                       <h1>Welcome {user_obj?.data?.userOne?.first_name}</h1> </div>
+                        <h1>Welcome {user_obj?.data?.userOne?.first_name}</h1> </div>
 
                     <div className='balance'>
                         <h2>Available Balance :  {balance_obj?.data?.balanceOne?.amount}</h2>
@@ -73,18 +93,18 @@ export default function Report() {
                 <div className='report-container'>
                     <div className='report-item'>
                         <div>Income data</div>
-                        <div className="income-item">
+                        <div className="item">
                             <div>Description</div>
-                            <div>Amount</div>
-                            <div>Date</div>
+                            <div>|</div> <div>Amount</div>
+                            <div>|</div><div>Date</div>
 
                         </div>
 
                         {mappedData?.map((item, index) => (
-                            <div className={`income-item`} key={index}>
+                            <div className={`item`} key={index}>
                                 <div>{item.name}</div>
-                                <div>{item.amount}</div>
-                                <div>{item.date}</div>
+                                <div>|</div><div>{item.amount}</div>
+                                <div>|</div><div>{item.date}</div>
                             </div>
                         ))}
 
@@ -92,58 +112,73 @@ export default function Report() {
                     </div>
                     <div className='report-item'>
                         <div>Expense</div>
+                        <div className='item'>
+                            <div>Category ID</div>
+                            <div>|</div>
+                            <div>Amount</div>
+                            <div>|</div><div>Date</div>
+                            <div>|</div><div>Description</div>
+                        </div>
 
                         {mappedExpense?.map((item, index) => (
-                            <div className="income-item" key={index}>
-                                <div className="left">{item?.categoryid}</div>
-                                <div className="middle">{item?.amount}</div>
-                                <div className="right">{item?.date}</div>
-                                <div className="right">{item?.description}</div>
+                            <div className="item" key={index}>
+                                <div >{item?.categoryid}</div>
+                                <div>|</div><div >{item?.amount}</div>
+                                <div>|</div><div >{item?.date}</div>
+                                <div>|</div><div >{item?.description}</div>
                             </div>
                         ))}
                     </div>
-                    <div className='report-item'>three</div>
-                    <div className='report-item'>four</div>
-                    <div className='report-item'>five</div>
+                    <div className='report-item'>
+                        <div>Wishlist</div>
+                        <div className='item'>
+                            <div>Name</div>
+                            <div>|</div> <div>Cost</div>
+                            <div>|</div> <div>Status</div>
+                            <div>|</div>  <div>source</div>
+                        </div>
+                        {mappedWishlist?.map((item, index) => (
+                            <div className='item' key={index}>
+                                <div>{item?.name}</div>
+                                <div>|</div> <div>{item?.cost}</div>
+                                <div>|</div> <div>{item?.status} </div>
+                                <div>|</div><div>{item?.source}</div>
+                            </div>
+                        ))}
+
+                    </div>
+                    <div className='report-item'>
+                        <div>EMIs</div>
+                        <div className='item'>
+                            <div>Lender</div>
+                            <div>|</div><div>Amount</div>
+                            <div>|</div><div>Interest</div>
+                        </div>
+
+                        {mappedEmis?.map((item, index) => (
+                            <div className='item' key={index}>
+                                <div> {item?.lender}</div>
+                                <div>|</div><div> {item?.amount}</div>
+                                <div>|</div><div> {item?.interest}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className='report-item'>
+                        <div>Saving</div>
+                        <div>
+                            <div>Amount</div>
+                        </div>
+
+                        {mappedSaving?.map((item, index) => (
+                            <div>
+                                <div>{item?.amount}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                {/* <div className='saving'>
-                    : saving
-                    {
-                        saving_obj?.data?.savingOne?.map((elem, index) => {
-                            return <div key={index}> {elem?.amount}</div>
-                        })
-                    }
-
-                    <div className='expense'>
-                        : expense
-                        {
-                            expense_obj?.data?.expenseOne?.map((elem, index) => {
-                                return <div key={index}> {elem?.description}</div>
-                            })
-                        }
-                    </div>
-
-                    <div className='income'>
-                        :income
-                        {income_obj?.data?.incomeOne?.map((elem, index) => {
-                            return <div key={index}>{elem?.amount}</div>
-                        })
-                        }
-                    </div>
-
-                    <div className='emis'>
-                        :emis
-                        {emis_obj?.data?.emisOne?.map((elem, index) => {
-                            return <div key={index}>{elem?.lender}</div>
-                        }
-                        )
-                        }
-                    </div>
-
-                </div> */}
             </div>
         </div>
     )
-    
+
 }

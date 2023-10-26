@@ -9,6 +9,7 @@ from models.model_income import Incomes
 from models.model_saving import Savings
 
 # standard imports
+from sqlalchemy import text
 from ariadne.exceptions import HttpBadRequestError
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
@@ -88,8 +89,10 @@ def resolver_incomeOne(*_,user_id):
 
 @query.field("wishlistOne")
 def resolver_wishlistone(*_,user_id):
+    # que = """select * from wishlist where user_id =1 order by estimated_cost limit 2"""
     wis = session.query(Wishlist).where(Wishlist.user_id == user_id)
-    print(wis)
+    # result = session.query().from_statement(text(que))
+    # return result.all
     return wis
 @query.field("wishlist")
 def resolver_wislist(*_):

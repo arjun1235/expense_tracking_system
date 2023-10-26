@@ -57,3 +57,15 @@ query emisOne($user_id:Int!){
   }
 }
 `
+export const GET_WISHLSIT = gql`
+query wishlistOne($user_id:Int!){
+  wishlistOne(user_id:$user_id){
+    categories_id
+    item_name
+    estimated_cost
+    status
+    priority
+    source
+  }
+}
+`

@@ -12,7 +12,13 @@ export default function User_dashboard() {
     // },
   },
   )
+  const userid = data?.userOne?.id
 
+  function to_clear(){
+    localStorage.removeItem("token")
+    localStorage.removeItem("userid")
+  }
+  
   return (
     <div className='bg'>
           <h1 className='welcome'> Welcome {data?.userOne?.first_name}
@@ -37,7 +43,7 @@ export default function User_dashboard() {
                  </div>
                 
                 <div className='space'>
-                <Link to ="/Login"><button className="logout">Logout</button></Link>
+                <Link to ="/Login"><button className="logout"  onClick={to_clear}>Logout</button></Link>
                 </div>
                
           </div> 

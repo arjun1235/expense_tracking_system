@@ -1,20 +1,22 @@
-def logic(my_input):
-    ls = my_input.split(",")
-    sum = 0
-    for i in ls:
-        if i.isdigit():
-            if int(i) < 0:
-                break
+def longestCommonPrefix(strs):
+        if not strs:
+            return ""
+
+        strs.sort() # it is used to ensure the shorest string is first
+        first_str = strs[0]
+        last_str = strs[-1]
+
+        common_prefix = []
+        for i in range(len(first_str)):
+            if i < len(last_str) and first_str[i] == last_str[i]:
+                common_prefix.append(first_str[i])
             else:
-                sum+=int(i)
-        else:
-            break
-    return sum
+                break
+        return "".join(common_prefix
 
-# Do not edit below
 
-# Get the input
-my_input = "5,9,3,-1,5"
 
-# Print output returned from the logic function
-print(logic(my_input))
+
+
+strs = ["flower","flow","flight","flow","floi"]
+print( longestCommonPrefix(strs))
